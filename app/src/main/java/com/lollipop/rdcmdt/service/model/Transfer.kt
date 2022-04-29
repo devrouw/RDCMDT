@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 data class Transfer(
     val status : String? = "-",
     val transactionId : String? = "-",
-    val amount : Long? = 0,
+    val amount : Float? = 0F,
     val description : String? = "-",
     val recipientAccount : String? = "-"
 )

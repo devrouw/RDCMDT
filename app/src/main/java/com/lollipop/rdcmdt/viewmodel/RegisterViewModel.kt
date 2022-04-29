@@ -27,16 +27,10 @@ class RegisterViewModel @Inject constructor(
     private val _registerResponse = MutableLiveData<ResultOfNetwork<Auth>>()
 
     fun register(username: String, password: String){
-        val bodyRequest = JSONObject().let { obj ->
-            obj.put("username", username)
-            obj.put("password", password)
-            ConstructRawRequest.constructRawRequest(obj)
-        }
-
         viewModelScope.launch(dispatcher) {
             try {
                 _registerResponse.postValue(ResultOfNetwork.Loading(true))
-                _registerResponse.postValue(repository.post(bodyRequest))
+                _registerResponse.postValue(repository.post(username, password))
             }catch (throwable: Throwable){
                 when(throwable){
                     is HttpException -> {

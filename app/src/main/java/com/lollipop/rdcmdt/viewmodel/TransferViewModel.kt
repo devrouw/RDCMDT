@@ -28,16 +28,10 @@ class TransferViewModel @Inject constructor(
     private val _transferResponse = MutableLiveData<ResultOfNetwork<Transfer>>()
 
     fun transfer(accountNo: String, amount: Float, description: String, token: String){
-        val bodyRequest = JSONObject().let { obj ->
-            obj.put("receipientAccountNo", accountNo)
-            obj.put("amount", amount)
-            obj.put("description", description)
-            ConstructRawRequest.constructRawRequest(obj)
-        }
         viewModelScope.launch(dispatcher) {
             try {
                 _transferResponse.postValue(ResultOfNetwork.Loading(true))
-                _transferResponse.postValue(repository.post(bodyRequest, token))
+                _transferResponse.postValue(repository.post(accountNo, amount, description, token))
             }catch (throwable: Throwable){
                 when(throwable){
                     is HttpException -> {

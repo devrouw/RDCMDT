@@ -28,15 +28,10 @@ private val repository: LoginRepository,
 
     fun login(username: String, password: String){
 
-        val bodyRequest = JSONObject().let { obj ->
-            obj.put("username", username)
-            obj.put("password", password)
-            constructRawRequest(obj)
-        }
         viewModelScope.launch(dispatcher) {
             try {
                 _loginResponse.postValue(ResultOfNetwork.Loading(true))
-                _loginResponse.postValue(repository.post(bodyRequest))
+                _loginResponse.postValue(repository.post(username, password))
             }catch (throwable: Throwable){
                 when(throwable){
                     is HttpException -> {
